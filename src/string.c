@@ -1,6 +1,18 @@
 #include "../include/types.h"
 
-#define TOLOWER(x) ((x) | 0x20)
+//Copied from string.c in linux source code
+
+# define CC_SET(c) "\n\t/* output condition code " #c "*/\n"
+# define CC_OUT(c) "=@cc" #c
+
+int memcmp(const void *s1, const void *s2, size_t len){
+    int diff;
+    asm("repe; cmpsb" CC_SET(nz)
+        : CC_OUT(nz) (diff), "+D" (s1), "+S" (s2), "+c" (len));
+    return diff;
+}
+
+// finish copying here. 
 
 int strcmp(char *s1, char *s2){
 
@@ -48,5 +60,3 @@ size_t strnlen(char *s , size_t maxlen){
 	}
 	return (maxlen - len);
 }
-
-
