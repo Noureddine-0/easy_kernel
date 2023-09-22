@@ -1,5 +1,7 @@
 #include "../include/types.h"
 
+#define TOLOWER(x) ((x) | 0x20)
+
 int strcmp(char *s1, char *s2){
 
 	int out = 0 ;
@@ -64,4 +66,5 @@ size_t memset(void *m1 , char c , size_t ,maxlen){
 	}
 	return maxlen -len ;
 }
+
 
