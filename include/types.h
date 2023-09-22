@@ -10,4 +10,7 @@
 
 #endif
 
+typedef size_t unsigned long ;
+
+
 #endif 
