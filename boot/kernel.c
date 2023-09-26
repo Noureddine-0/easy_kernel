@@ -1,5 +1,5 @@
 #include <stdint.h> 
-#include <stddef.h>
+#include <string.h>
 
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
@@ -28,14 +28,6 @@ static inline uint16_t vga_entry(unsigned char c , uint8_t color ){
 	return (uint16_t) c | (uint16_t) color<<8;
 }
 
-size_t strlen(const char *data){
-	size_t len=0 ;
-	while (*data){
-		len ++;
-		data ++;
-	}
-	return len ;
-}
 
 static const size_t VGA_WIDTH = 80 ;
 static const size_t VGA_HEIGHT = 25 ;
