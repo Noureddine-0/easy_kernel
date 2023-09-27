@@ -24,3 +24,5 @@ size_t strnlen(const char *data , size_t maxlen){
 
 	return (maxlen - len);
 }
+
+
