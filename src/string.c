@@ -41,8 +41,9 @@ size_t strnlen(const char *data , size_t maxlen){
  */
 int strcmp(const char *s1, const char *s2){
     while (*s2 || *s1){
-        if(*s2 != *s1)
+        if(*s2 != *s1){
             return *s1 - *s2;
+        }
 	    s1++;
         s2++;
     }
@@ -59,9 +60,9 @@ int strncmp(const char *s1 , const char *s2 , size_t maxlen){
 	size_t len = maxlen ;
 	while (len && (*s2 || *s1)){
 		len -- ;
-		if (*s2 != *s1)
+		if (*s2 != *s1){
 			return *s1 - *s2;
-
+		}
 		s1++;
 		s2++;
 	}
@@ -70,8 +71,8 @@ int strncmp(const char *s1 , const char *s2 , size_t maxlen){
 
 
 
-long strtol(const char *str , char **endptr , int base){
+//long strtol(const char *str , char **endptr , int base){
 	//TODO 
-}
+//}
 
 

@@ -18,9 +18,9 @@ Welcome to easy_kernel! This project is an ongoing exploration into the world of
 - Knoweldge about computer science and operating systems architecture.
 
 ## Build and Run:
-- Building the Kernel: Not that difficult to build.
+- Building the Kernel: For now just run make in the boot folder.
 - Running the Kernel:
-  - Not that difficult to run.
+  - qemu-system-i386 -kernel myos.bin
 
 ## How to Contribute:
 Contributions and suggestions are always welcome! Here's how you can contribute:
