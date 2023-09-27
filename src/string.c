@@ -2,7 +2,7 @@
 #include <errno.h>
 
 
-#define ABS(X) (((X) > 0) ? (X) : -(X))
+//#define ABS(X) (((X) > 0) ? (X) : -(X))
 
 /**
  * strlen - Calculates the length of a string until we reach \x00
