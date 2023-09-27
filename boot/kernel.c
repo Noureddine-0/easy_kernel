@@ -1,6 +1,12 @@
 #include <stdint.h> 
 #include <string.h>
 
+/* Note that this is the main file just for now , later this file will be deprecated
+* and becomes just a console setup called by the real main , So dont be frustrated 
+* if u see kmain ;)
+*/
+
+
 /* Issue when depassing the 25 lines */
 
 enum vga_color {
