@@ -4,6 +4,8 @@
 ENTRY(_start)
 
 
+/* Linker script 
+*/
 SECTIONS{
 	. = 1M;
 
