@@ -22,16 +22,25 @@
 #define MIN(x,y) ((x)<(y)?(x):(y))
 
 
+
 /*
- * Add purpose of VolFunc later
-*/
-
-
+ * If we just create the function __GetCursor like this :
+ [[maybe_unused]] static  uint16_t __GetCursor(){
+    int offset = 0 ;
+    outb(VGA_CONTROL_REGISTER , VGA_OFFSET_LOW);
+    offset  +=inb(VGA_DATA_REGISTER);
+    outb(VGA_CONTROL_REGISTER , VGA_OFFSET_HIGH);
+    offset +=inb(VGA_DATA_REGISTER) << 8;
+    return offset;}
+ *  The result we will get will be wrong , because the compiler make the assumption that the first and second call to inb will give the same result
+ *  since we called the same routine with the same arguments , but this is wrong because we modify the VGA_CONTROL_REGISTER , and thus we need to make it 
+ *  volatile , thus creating a function pointer to it marked as volatile  .
+ */
 
 
 static uint8_t inb(uint16_t);
 typedef uint8_t(*pFunc1)(uint16_t); 
-volatile pFunc1 __pInByte = inb;
+volatile pFunc1 __pinb = inb;
 
 #ifdef __DEBUG
 static uint16_t __GetCursor(void) ;
@@ -77,13 +86,13 @@ static void outb(uint16_t port , uint8_t data){
 [[maybe_unused]] static  uint16_t __GetCursor(){
     int offset = 0 ;
     outb(VGA_CONTROL_REGISTER , VGA_OFFSET_LOW);
-    offset  +=__pInByte(VGA_DATA_REGISTER);
+    offset  +=__pinb(VGA_DATA_REGISTER);
     outb(VGA_CONTROL_REGISTER , VGA_OFFSET_HIGH);
-    offset +=__pInByte(VGA_DATA_REGISTER) << 8;
+    offset +=__pinb(VGA_DATA_REGISTER) << 8;
     return offset;
 }
 
-[[maybe_unused]]static void __CursorSet(uint16_t offset){
+static void __CursorSet(uint16_t offset){
     outb(VGA_CONTROL_REGISTER , VGA_OFFSET_LOW) ;
     outb(VGA_DATA_REGISTER , (uint8_t)(offset & 0xff)) ;
     outb(VGA_CONTROL_REGISTER , VGA_OFFSET_HIGH);
