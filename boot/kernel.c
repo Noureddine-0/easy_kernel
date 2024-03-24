@@ -1,142 +1,68 @@
-#include <stdint.h> 
-#include <string.h>
+#include <console.h>
 
-/* Note that this is the main file just for now , later this file will be deprecated
-* and becomes just a console setup called by the real main , So dont be frustrated 
-* if u see kmain ;)
-*/
+void kmain(){
+	__InitializeTerminal();
+terminal_writestring("=\n");
+terminal_writestring(">\n");
+terminal_writestring("?\n");
+terminal_writestring("@\n");
+terminal_writestring("A\n");
+terminal_writestring("B\n");
+terminal_writestring("C\n");
+terminal_writestring("D\n");
+terminal_writestring("E\n");
+terminal_writestring("F\n");
+terminal_writestring("G\n");
+terminal_writestring("H\n");
+terminal_writestring("I\n");
+terminal_writestring("J\n");
+terminal_writestring("K\n");
+terminal_writestring("L\n");
+terminal_writestring("M\n");
+terminal_writestring("N\n");
+terminal_writestring("O\n");
+terminal_writestring("P\n");
+terminal_writestring("Q\n");
+terminal_writestring("R\n");
+terminal_writestring("S\n");
+terminal_writestring("T\n");
+terminal_writestring("U\n");
+terminal_writestring("V\n");
+terminal_writestring("W\n");
+terminal_writestring("X\n");
+terminal_writestring("Y\n");
+terminal_writestring("Z\n");
+terminal_writestring("[\n");
+terminal_writestring("\\n");
+terminal_writestring("]\n");
+terminal_writestring("^\n");
+terminal_writestring("_\n");
+terminal_writestring("`\n");
+terminal_writestring("a\n");
+terminal_writestring("b\n");
+terminal_writestring("c\n");
+terminal_writestring("d\n");
+terminal_writestring("e\n");
+terminal_writestring("f\n");
+terminal_writestring("g\n");
+terminal_writestring("h\n");
+terminal_writestring("i\n");
+terminal_writestring("j\n");
+terminal_writestring("k\n");
+terminal_writestring("l\n");
+terminal_writestring("akjakakdhlaasdascvcdvcvskdvshjjjjjjjjjjjjjjjjsasllgsdcadfonhsochofhuxwmurfzadvbfbnvsnxfm\n");
+terminal_writestring("n\n");
+terminal_writestring("o\n");
+terminal_writestring("p\n");
+terminal_writestring("q\n");
+terminal_writestring("r\n");
+terminal_writestring("s\n");
+terminal_writestring("t\n");
+terminal_writestring("u\n");
+terminal_writestring("v\n");
+terminal_writestring("w\n");
+terminal_writestring("x\n");
+terminal_writestring("y\n");
+terminal_writestring("dvfmlvhfmhvs,azqzzqavfblhjkjjjjjjjjjjkdsv;j;fvfmb[iaj,xqazq[.xrxcddkkkksd sdnvslfvsvjsvjjpjwspojjjfbslfz\n");
 
-
-/* Issue when depassing the 25 lines */
-
-enum vga_color {
-    VGA_COLOR_BLACK = 0,
-    VGA_COLOR_BLUE = 1,
-    VGA_COLOR_GREEN = 2,
-    VGA_COLOR_CYAN = 3,
-    VGA_COLOR_RED = 4,
-    VGA_COLOR_MAGENTA = 5,
-    VGA_COLOR_BROWN = 6,
-    VGA_COLOR_LIGHT_GREY = 7,
-    VGA_COLOR_DARK_GREY = 8,
-    VGA_COLOR_LIGHT_BLUE = 9,
-    VGA_COLOR_LIGHT_GREEN = 10,
-    VGA_COLOR_LIGHT_CYAN = 11,
-    VGA_COLOR_LIGHT_RED = 12,
-    VGA_COLOR_LIGHT_MAGENTA = 13,
-    VGA_COLOR_LIGHT_BROWN = 14,
-    VGA_COLOR_WHITE = 15,
-};
-
-static  inline uint8_t vga_entry_color(enum vga_color fg , enum vga_color bg){
-    return fg | bg<<4;
 }
-
-static inline uint16_t vga_entry(unsigned char c , uint8_t color ){
-    return (uint16_t) c | (uint16_t) color<<8;
-}
-
-
-static const size_t VGA_WIDTH = 80 ;
-static const size_t VGA_HEIGHT = 25 ;
-
-size_t terminal_row;
-size_t terminal_column;
-uint8_t terminal_color ;
-uint16_t *terminal_buffer;
-
-
-void terminal_initialize(void){
-    terminal_row = 0;
-    terminal_column = 0;
-    terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREEN,VGA_COLOR_BLACK);
-    terminal_buffer = (uint16_t *)0xb8000;
-    for (size_t y = 0; y < VGA_HEIGHT; ++y){
-        for(size_t x=0 ; x < VGA_WIDTH ; ++x){
-            const size_t index  = y * VGA_WIDTH + x;
-            terminal_buffer[index] = vga_entry(' ',terminal_color);
-        }
-    }
-}
-
-void clear_terminal(void){
-    terminal_initialize();
-}
-
-void add_last_del_first(void){
-    for(size_t y = 1 ; y < VGA_HEIGHT ; y++){
-        for (size_t x = 0; x < VGA_WIDTH; x++)
-        {
-            terminal_buffer[(y-1)*VGA_HEIGHT + x] = terminal_buffer[y*VGA_HEIGHT +x];
-        }
-    }
-
-    for (size_t x = 0 ;x < VGA_WIDTH ; ++x){
-        terminal_buffer[(VGA_HEIGHT-1) *VGA_HEIGHT + x] = vga_entry(' ' ,terminal_color);
-    }
-}
-
-void add_last(void){
-    add_last_del_first();
-    terminal_row = VGA_HEIGHT -1;
-}
-
-int check_special_char(char c){
-    switch (c){
-        case 0xa:
-            terminal_column = 0 ;
-            if(++terminal_row == VGA_HEIGHT){
-                add_last();
-            }
-            return 1; 
-        case 0x9:
-            terminal_column = ((terminal_column + 4) % VGA_WIDTH);
-            //if (terminal_column < 4)
-            //  add_last();
-            //return 1 ;
-    }
-    return 0 ;
-}
-
-void terminal_putentryat(char c, uint8_t color , size_t x, size_t y){
-    const size_t index = y*VGA_WIDTH +x ;
-    terminal_buffer[index] = vga_entry(c , color);
-}
-
-void terminal_putchar(char c){
-    if (check_special_char(c))
-        return ;
-    terminal_putentryat(c , terminal_color , terminal_column , terminal_row);
-    if(++terminal_column == VGA_WIDTH){
-        terminal_column = 0;
-        if(++terminal_row == VGA_HEIGHT){
-            add_last();
-        }
-    }
-}
-
-void terminal_write(const char *data , size_t size){
-    for(size_t i = 0 ; i < size ; ++i){
-        terminal_putchar(data[i]);
-    }
-}
-
-void terminal_writestring(const char *data){
-    terminal_write(data , strlen(data));
-}
-
-
-
-void kmain (void){
-    terminal_initialize();
-    terminal_writestring("ooooooooooooooooooo\n");
-    for(size_t i = 0 ; i < VGA_HEIGHT -1 ; i++){
-        terminal_writestring("Hello , do you think it will work ?\n");
-    //  terminal_writestring("Hello , do you think it will work ?\n");
-    //  terminal_writestring("Hello , do you think it will work ?\n");
-    }
-    
-    //terminal_writestring("Got it");   
-}
-
-

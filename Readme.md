@@ -10,6 +10,7 @@ Welcome to easy_kernel! This project is an ongoing exploration into the world of
 
 ## Current Features:
 - Entry point to the kernel , Main function .
+- Basic VGA driver .
 
 ## Future Roadmap:
 - configure registers and add IDTs.
@@ -18,9 +19,9 @@ Welcome to easy_kernel! This project is an ongoing exploration into the world of
 - Knoweldge about computer science and operating systems architecture.
 
 ## Build and Run:
-- Building the Kernel: For now just run make in the boot folder.
+- Building the Kernel: For now just run make in the boot folder (make sure to configure the path of the compiler).
 - Running the Kernel:
-  - qemu-system-i386 -kernel myos.bin
+  - make test
 
 ## How to Contribute:
 Contributions and suggestions are always welcome! Here's how you can contribute:
