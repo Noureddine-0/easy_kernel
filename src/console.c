@@ -23,7 +23,7 @@
 
 
 
-/*
+/**
  * If we just create the function __GetCursor like this :
  [[maybe_unused]] static  uint16_t __GetCursor(){
     int offset = 0 ;
@@ -32,9 +32,9 @@
     outb(VGA_CONTROL_REGISTER , VGA_OFFSET_HIGH);
     offset +=inb(VGA_DATA_REGISTER) << 8;
     return offset;}
- *  The result we will get will be wrong , because the compiler make the assumption that the first and second call to inb will give the same result
- *  since we called the same routine with the same arguments , but this is wrong because we modify the VGA_CONTROL_REGISTER , and thus we need to make it 
- *  volatile , thus creating a function pointer to it marked as volatile  .
+ * The result we will get will be wrong , because the compiler make the assumption that the first and second call to inb will give the same result
+ * since we called the same routine with the same arguments , but this is wrong because we modify the VGA_CONTROL_REGISTER , and thus we need to make it 
+ * volatile , thus creating a function pointer to it marked as volatile  .
  */
 
 
@@ -121,7 +121,6 @@ void __InitializeTerminal(void){
     terminal.buffer = terminal_buffer;
     terminal.start = 0;
     terminal.virtual_cursor_position = 0;
-    terminal.new_line = 0;  
     terminal_row = 0;
     terminal_column = 0;
     terminal_color = vga_entry_color(VGA_COLOR_WHITE,VGA_COLOR_BLACK);
@@ -140,11 +139,6 @@ void __TerminalClear(void){
     __InitializeTerminal();
 }
 
-
-
-/*
-*Support only new line for now
-*/
 
 static void handle_max_rows(){
     size_t j ;
@@ -168,6 +162,10 @@ static void handle_max_rows(){
     
     terminal_row--;
 }
+
+/**
+ * Support only new line for the moment
+ */
 
 static int check_special_char(char c){
     switch (c){
@@ -203,7 +201,8 @@ static  void terminal_putentryat(uint8_t c, uint8_t x, uint8_t y){
 }
 
 void terminal_putchar(char c){
-    terminal_putentryat(c ,  terminal_column , terminal_row);
+    terminal_putentryat(c ,  terminal_column
+     , terminal_row);
 }
 
 static void terminal_write(const char *data , size_t size){
@@ -215,7 +214,6 @@ static void terminal_write(const char *data , size_t size){
 void terminal_writestring(const char *data){
     terminal_write(data , strlen(data));
     __CursorSet(terminal_row*MAX_COLS + terminal_column);
-    terminal.new_line = 0 ;
 }
 
 

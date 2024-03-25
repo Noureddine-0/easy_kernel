@@ -21,7 +21,6 @@ struct vga_terminal{
 	uint8_t *buffer ;
 	size_t virtual_cursor_position;
 	size_t start;
-	int new_line;
 };
 
 

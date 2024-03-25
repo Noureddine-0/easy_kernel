@@ -51,7 +51,7 @@ int strcmp(const char *s1, const char *s2){
 }
 
 /**
- * strncmp - Compare two strings in a fixed range
+ * strncmp - Compare two arrays of char in a fixed range
  * @s1 : First string
  * @s2 : Second string
  * @maxlen : Max number of bytes to compare
@@ -71,8 +71,70 @@ int strncmp(const char *s1 , const char *s2 , size_t maxlen){
 
 
 
+/**
+ * strrev - reverse an array of char
+ * @buffer : The array to be reversed
+ */
+
+
+void strrev(char *buffer){
+	size_t size  =  strlen(buffer);
+	size_t index= 0 ;
+	char temp;
+	while(index < size/2 ){
+		temp =  buffer[index];
+		buffer[index] = buffer[size - index -1];
+		buffer[size-index -1] =  temp;
+		index++;
+	}
+}
+
+/**
+ * itoa : Integer to array
+ * @num : The integer to convert
+ * @buffer : The buffer where to write the converted integer
+ * @base : The base of the integer
+ */
+
+void itoa(int num , char *buffer , int base){
+	uint32_t cp_num ;
+	int remainder ;
+	size_t index = 0 ;
+	int is_negative = 0;
+
+	if (base==16){
+		cp_num =  (uint32_t)num ;
+	}else{
+		if (num < 0 )
+			is_negative++;
+		cp_num = ABS(num);
+	}
+	
+	while (cp_num){
+		remainder =  cp_num % base ;
+		if (remainder  >= 0xa){
+			buffer[index] = 'A' + (char)(remainder -0xA);
+		}else{
+			buffer[index] = '0'+(char)remainder;
+		}
+		index++;
+		cp_num /=base;
+	}
+	if (is_negative){
+		buffer[index] ='-';
+		index++;
+	}
+	if (base == 16){
+		buffer[index++] = 'x';
+		buffer[index++]  = '0';
+		buffer[index] = '\0';
+	}
+	strrev(buffer);
+}
+
 //long strtol(const char *str , char **endptr , int base){
 	//TODO 
 //}
+
 
 

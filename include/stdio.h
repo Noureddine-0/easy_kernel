@@ -3,5 +3,8 @@
 
 #include <console.h>
 
-extern 
-extern void printf(const char * , ...);
+extern int printk(const char * , ...);
+extern int putk(const char *);
+extern snprintf(const char * , size_t  , const char * , ... );
+
+#endif
