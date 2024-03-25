@@ -6,12 +6,14 @@ all:
 	/usr/local/i386elfgcc/bin/i386-elf-gcc -I ../include/ -Wno-implicit-fallthrough -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 	/usr/local/i386elfgcc/bin/i386-elf-gcc -I ../include -c ../src/console.c -o ../src/console.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 	/usr/local/i386elfgcc/bin/i386-elf-gcc -I ../include -c ../src/string.c -o ../src/string.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-	/usr/local/i386elfgcc/bin/i386-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o ../src/console.o  ../src/string.o -lgcc
+	/usr/local/i386elfgcc/bin/i386-elf-gcc -I ../include -c ../src/stdio.c -o ../src/stdio.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+	/usr/local/i386elfgcc/bin/i386-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o ../src/console.o  ../src/string.o ../src/stdio.o -lgcc
 remove:
 	rm -f boot.o
 	rm -f kernel.o
 	rm -f ../src/console.o
 	rm -f ../src/string.o
+	rm -f ../src/stdio.o
 	rm -f myos.bin
 test:
 	qemu-system-i386 -kernel myos.bin
